@@ -17,6 +17,20 @@ Para que o backend funcione, execute os seguintes comandos (sem aspas):
 1. "yarn install", para instalar as dependências
 2. "yarn start", para "subir" o backend
 
+### Backend
+
+1. instalar o json-server para simular o backend
+
+```
+npm install -g json-server
+```
+
+2. para rodar o json server:
+
+```
+json-server --watch db.json
+```
+
 ## Ambiente de Produção
 
 Para visualizar o projeto rodando, basta acessar o [link do desafio!](https://fabi-igti-react-desafio.web.app/)
