@@ -39,7 +39,7 @@ Para visualizar o projeto rodando, basta acessar o [link do desafio!](https://fa
 
 Imagem não disponível no docker hub.
 
-## Objetivos do Trabalho Prático
+## Objetivos do Desafio
 
 Exercitar os seguintes conceitos trabalhados no Módulo:
 
@@ -74,7 +74,7 @@ Os alunos deverão desempenhar as seguintes atividades:
    melhorando a experiência do usuário.
 10. As imagens abaixo podem servir de orientação para o aluno.
 
-![alt text](https://github.com/FabianaTavares/modulo3-React-desafio/blob/main/public/imagem_desafio.PNG)
+![alt text](https://github.com/FabianaTavares/modulo3-React-desafio/tree/main/frontend/react-twitter/public/imagem_desafio.PNG)
 
 ## Seguem algumas dicas com base na implementação feita pelo professor, que foi feita com a utilização de React Hooks:
 
