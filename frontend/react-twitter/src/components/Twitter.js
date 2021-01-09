@@ -1,34 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Tweet from './Tweet';
-
 import * as api from './../api/apiService';
 import { v4 as uuidv4 } from 'uuid';
 
 const BAD_COLOR = '#c0392b';
 const GOOD_COLOR = '#27ae60';
 const ORANGE_COLOR = '#ff8000'
-export default function Twitter({twitters, onSave, onPersist }) {
+export default function Twitter({twitters, onSave }) {
 
-  const listTwitters = [];
-  let currentTewitters = [];
   let id = 1;
   const [inputStyle, setInputStyle] = useState();
   const [caractersDescription, setCaractersDescription] = useState('');
   const [caracteresRestantes, setCaractersRestantes] = useState();
-  const [tweet, setTweet] = useState([]);
+  const [tweetContent, setTweetContent] = React.useState('');
+  const [tweets, setTweet] = React.useState([]);
 
-  twitters.forEach((tweet) => {
-    listTwitters.push({
-      id: id++,
-      value: tweet.value,
-      isDeleted: tweet.isDeleted,
-    });
-    currentTewitters.push(tweet);
-  });
+  React.useEffect(() => {
+    async function getData() {
+      const tweets = await api.getAllTwitters();
+      setTweet(tweets);
+    }
+    getData();
+  }, []);
 
   React.useEffect(() => {
     document.querySelector('textArea').focus();
-  } , [tweet]) ;
+  } , [tweetContent]) ;
 
   const handleKeyUp = ({ ctrlKey, key }) => {
     if (!ctrlKey) {
@@ -37,7 +34,7 @@ export default function Twitter({twitters, onSave, onPersist }) {
     if (key !== 'Enter') {
       return;
     }
-    if (tweet.trim() === '') {
+    if (tweetContent.trim() === '') {
       return;
     }
     tweeters();
@@ -45,24 +42,29 @@ export default function Twitter({twitters, onSave, onPersist }) {
 
   const tweeters = async () => {
      const limite = 280;
-    if(caracteresRestantes < 0 || caracteresRestantes === limite){
+    if(caracteresRestantes < 0 || caracteresRestantes === limite ||
+      caractersDescription.trim() === ''){
       return;
     }
 
-      setTweet([... currentTewitters, tweeters]);
+      setTweet([...tweets, tweeters]);
       setCaractersDescription('');
+      setCaractersRestantes('');
+      setTweetContent('');
   }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(tweet);
     const formData = {
       id: uuidv4(),
-      value: tweet,
+      value: tweetContent,
     };
     onSave(formData);
-    currentTewitters.push(formData);
-    console.log(currentTewitters);
+    setTweet([...tweets, formData]);
+    setCaractersDescription('');
+    setCaractersRestantes('');
+    setTweetContent('');
+
   };
 
   const handleTweetChange = (event) => {
@@ -87,20 +89,22 @@ export default function Twitter({twitters, onSave, onPersist }) {
       setInputStyle(inputStyle);
       setCaractersDescription(caractersDescription);
       setCaractersRestantes(caracteresRestantes);
-      setTweet(tweet);
+      setTweetContent(tweet);
+
     }
 
     setCaractersDescription(caractersDescription);
     setCaractersRestantes(caracteresRestantes);
-    setTweet(tweet);
+    setTweetContent(tweet);
+
   };
 
   const handleActionClick = async (id) => {
-    console.log(id);
-      await api.deleteTweet(id);
-
-      console.log(tweet);
-     setTweet(twitters.filter((tweet) => tweet.id !== id));
+    await api.deleteTweet(id);
+    setTweet(tweets.filter((t) => t.id !== id));
+    setCaractersDescription('');
+    setCaractersRestantes('');
+    setTweetContent('');
   };
 
   return (
@@ -114,7 +118,7 @@ export default function Twitter({twitters, onSave, onPersist }) {
           //id={id}
           step="1"
           autoFocus
-          value={tweet}
+          value={tweetContent}
           onChange={handleTweetChange}
           onKeyUp={handleKeyUp}
           rows="6"
@@ -124,7 +128,9 @@ export default function Twitter({twitters, onSave, onPersist }) {
             <span style={inputStyle}>{caractersDescription} </span>
             <button
               className="waves-effect waves-light btn"
-              disabled={caracteresRestantes < 0}
+              disabled={caracteresRestantes < 0 ||
+                            caractersDescription.trim() === ''
+                        }
             >
               Twittar
             </button>
@@ -134,18 +140,17 @@ export default function Twitter({twitters, onSave, onPersist }) {
       </form>
       <div style={styles.dataStyle}>
 
-        <div className='tweets'>
-          {currentTewitters.map((tweet) => {
-          const { id } = tweet;
+        <div className='tweets' style={{ width: '100%' }}>
+          {tweets.map((tweet) => {
+            const { id } = tweet;
 
-          return (
-            <Tweet key={id} onActionClick={handleActionClick}>
-                {tweet}     
-            </Tweet>
-          );
-        })}
-      </div>
-
+            return (
+              <Tweet key={id} onActionClick={handleActionClick}>
+                  {tweet}
+              </Tweet>
+            );
+          })}
+        </div>
       </div>
     </div>
   )

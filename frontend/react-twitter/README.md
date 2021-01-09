@@ -28,7 +28,7 @@ npm install -g json-server
 2. para rodar o json server:
 
 ```
-json-server --watch db.json
+json-server --watch tweets.json
 ```
 
 ## Ambiente de Produção

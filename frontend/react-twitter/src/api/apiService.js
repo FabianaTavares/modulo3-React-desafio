@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/tweets/';
+const API_URL = 'http://localhost:3000/tweets';
 
 const TWEET_VALIDATION = [
     {
@@ -19,13 +19,9 @@ const TWEET_VALIDATION = [
 
 async function getAllTwitters() {
   const res = await axios.get(API_URL);
-  console.log(res);
   const twitters = res.data.map((tweet) => {
-    const { id, value } = tweet;
-
     return {
-      ...tweet,
-      isDeleted: false,
+      ...tweet
     };
   });
 
@@ -42,7 +38,6 @@ async function insertTweet(tweet) {
 }
 
 async function deleteTweet(id) {
-  console.log(id);
   const response = await axios.delete(`${API_URL}/${id}`);
   return response.data;
 }

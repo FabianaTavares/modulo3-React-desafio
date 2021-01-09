@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import * as api from './api/apiService';
 import Spinner from './components/Spinner';
-import Tweet from './components/Tweet';
 import Twitter from './components/Twitter';
 
 export default function App() {
   const [allTwitters, setAllTwitters] = useState([]);
-  const [selectedTweet, setSelectedTweet] = useState({});
 
-   useEffect(() => {
+  useEffect(() => {
     const getTwitters = async () => {
       const twitters = await api.getAllTwitters();
       setTimeout(() => {
@@ -19,15 +17,9 @@ export default function App() {
     getTwitters();
   }, []);
 
-  const handlePersist = (tweet) => {
-    setSelectedTweet(tweet);
-  };
-
   const handlePersistData = async (formData) => {
-    const { id, value } = formData;
-    const newTweets = Object.assign([], allTwitters);
     await api.insertTweet(formData);
-
+    setAllTwitters([...allTwitters, formData]);
   };
 
   return (
