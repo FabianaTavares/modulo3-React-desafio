@@ -33,7 +33,7 @@ json-server --watch tweets.json
 
 ## Ambiente de Produção
 
-Para visualizar o projeto rodando, basta acessar o [link do desafio!](https://fabi-igti-react-desafio.web.app/)
+Para visualizar o projeto rodando, basta acessar o [link do desafio!](https://fabi-igti-react-desafio.web.app/) OBS: Ainda estou estudando como o firebase pode ler o json backend, é um desafio novo.
 
 ## Docker Hub
 
